@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors');
+const { dbConnection }  = require('../database/config');
 
 //  Instancia de servidor, para no ponerlo directo en el app
 class Server {
@@ -8,6 +9,9 @@ class Server {
     this.app = express();
     this.port = process.env.PORT;
     this.usersPath = '/api/users';
+    
+    //  Conectar DB
+    this.connectionDB();
 
     //  Middlewares -> una funcion que se ejecutará antes de algo
     this.middlewares();
@@ -38,6 +42,10 @@ class Server {
       console.clear(); 
       console.log(`Example app listening on port ${this.port}`)
     })
+  }
+
+  async connectionDB() {
+    await dbConnection();
   }
 
 }
