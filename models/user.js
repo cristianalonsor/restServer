@@ -39,7 +39,9 @@ const UsuarioSchema = Schema({
 //  Elimino propiedades del objeto que enviaré como respuesta si es del modelo
 UsuarioSchema.methods.toJSON = function() {
 
-  const { __v, password, ...user } = this.toObject();
+  const { __v, password, _id, ...user } = this.toObject();
+  //  Cambiamos el _id de mongo por un uid
+  user.uid = _id;
   return user;
 
 }
