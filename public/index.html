@@ -1,240 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cristian Reyes</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous" />
-  </head>
-  <body class="bg-body-tertiary">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sign in</title>
+</head>
+<body>
 
-    <nav class="navbar navbar-expand-lg bg-body-secondary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <img src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-          Cristian Reyes
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Información</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Habilidades</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contacto</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+  <h1>GOOGLE SIGN IN</h1>
+  <hr>
+
+  <div id="g_id_onload"
+      data-client_id="429037016276-j68nq67gkh1887glmdgpvfev23ureapi.apps.googleusercontent.com"
+      data-callback="handleCredentialResponse"
+      data-auto_prompt="false">
+  </div>
+  <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left">
+  </div>
+
+  <div id="g_id_onload"
+  data-client_id="429037016276-j68nq67gkh1887glmdgpvfev23ureapi.apps.googleusercontent.com"
+  data-ux_mode="popup"
+  data-prompt_parent_id="parent_id"
+  ></div>
+
+  <button id="google_signout" >Signout</button>
+
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script>
+    function handleCredentialResponse(response) {
+      // GOOGLE ID TOKEN y enviarlo al backend con fetchapi
+      // console.log('ID TOKEN',response.credential);
+
+      const body = { id_token: response.credential}
+
+      fetch('http://localhost:8080/api/auth/google',{
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify( body )
+      })
+      .then( resp => resp.json() )
+      .then( resp => {
+        console.log(resp);
+        localStorage.setItem( 'email', resp.user.email );
+        location.reload();
+      } )
+      .catch( console.warn );
+    }
+
+    const button = document.getElementById('google_signout');
+    button.onclick = () => {
+      console.log( google.accounts.id );
+      google.accounts.id.disableAutoSelect();
+      google.accounts.id.revoke( localStorage.getItem( 'email' ), done => {
+        localStorage.clear();
+        location.reload();
+      })
+    }
+
     
-
-    <div class="container-fluid p-4">
-
-      <div class="text-center p-5">
-        <img class="w-25" src="https://media.licdn.com/dms/image/v2/D4E03AQFf5NX6B1ofQQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1701865079832?e=1729123200&v=beta&t=coqn5ZWlakV_UPYA8ps1uA_-apqLvAeCjCOtTil0RNw" class="img-thumbnail" alt="Profile pic">
-      </div>
-      <div class="container text-center info-container w-75">
-    
-        <p class="fs-2">Información</p>
-
-        <hr>
-
-        <p class="text-start fs-5">Desarrollador de software con conocimientos en tecnologías como Javascript, Java entre otras tecnologías 
-        además de especializarse en frameworks como "Node.js" y "Angular", con conocimientos técnicos para poder identificar problemas
-        y desarrollar soluciones con excelencia y con rápido aprendizaje de ser necesario. Capacidad de trabajar en
-        equipo para llegar en conjunto a una solución optima para la problemática que se presente entregando trabajos 
-        de calidad, escalables y amigables.</p>
-
-        <hr>
-          
-      </div>
-
-      <div class="container text-center habilidades-container w-75">
-    
-        <p class="fs-2">Habilidades</p>
-        
-        <p class="fs-3">Tecnologías.</p>
-
-        <div class="container text-center">
-          <div class="row">
-            <div class="col">
-
-              <div class="fs-5">Frontend</div>
-              <ul class="list-group list-group-flush rounded">
-                <li class="list-group-item">
-
-                  <div class="row">
-                    <div class="col">
-                      <div class="row w-100 d-flex flex-column">
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <img class="img-fluid w-25" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/2048px-Angular_full_color_logo.svg.png" alt="Angular">
-                          <img class="img-fluid w-25" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlGmKtrnxElpqw3AExKXPWWBulcwjlvDJa1Q&s" alt="React">
-                        </div>
-
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <p class="fs-4">Angular</p>
-                          <p class="fs-4">React</p>
-                        </div>
-                      
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col">
-                      <div class="row w-100 d-flex flex-column">
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <img class="img-fluid w-25" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png" alt="Javascript">
-                          <img class="img-fluid w-25" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/1200px-Typescript_logo_2020.svg.png" alt="Typescript">
-                        </div>
-
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <p class="fs-4">Javascript</p>
-                          <p class="fs-4">Typescript</p>
-                        </div>
-                      
-                      </div>
-                    </div>
-                  </div>
-
-                </li>
-
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col">
-                      <div class="row w-100 d-flex flex-column">
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <img class="img-fluid w-25" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap">
-                          <img class="img-fluid w-25" src="data:image/webp;base64,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" alt="Figma">
-                        </div>
-
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <p class="fs-4">Bootstrap</p>
-                          <p class="fs-4">Figma</p>
-                        </div>
-                      
-                      </div>
-                    </div>
-                  </div>
-
-                </li>
-
-              </ul>
-
-            </div>
-            <div class="col">
-
-              <div class="fs-5">Backend</div>
-              <ul class="list-group list-group-flush rounded">
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col">
-                      <div class="row w-100 d-flex flex-column">
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <img class="img-fluid w-25" src="https://education.oracle.com/file/general/p-80-java.png" alt="Java">
-                          <img class="img-fluid w-25" src="https://midu.dev/images/tags/node.png" alt="NodeJS">
-                        </div>
-
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <p class="fs-4">Java</p>
-                          <p class="fs-4">Node</p>
-                        </div>
-                      
-                      </div>
-                    </div>
-                  </div>
-
-                </li>
-                
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col">
-                      <div class="row w-100 d-flex flex-column">
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <img class="img-fluid w-25" src="https://avatars.githubusercontent.com/u/18133?s=280&v=4" alt="Git">
-                          <img class="img-fluid w-25" src="https://avatars.slack-edge.com/2018-11-30/493753869479_4b703f4119efe3d7d0ff_512.png" alt="Jira">
-                        </div>
-
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <p class="fs-4">Git</p>
-                          <p class="fs-4">Jira</p>
-                        </div>
-                      
-                      </div>
-                    </div>
-                  </div>
-
-                </li>
-
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col">
-                      <div class="row w-100 d-flex flex-column">
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <img class="img-fluid w-25" src="data:image/webp;base64,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" alt="Docker">
-                          <img class="img-fluid w-25" src="https://pbs.twimg.com/profile_images/1255113654049128448/J5Yt92WW_400x400.png" alt="MySQL">
-                        </div>
-
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <p class="fs-4">Docker</p>
-                          <p class="fs-4">MySQL</p>
-                        </div>
-                      
-                      </div>
-                    </div>
-                  </div>
-
-                </li>
-
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col">
-                      <div class="row w-100 d-flex flex-column">
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <img class="img-fluid w-25" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtm8uRc444DV-6FHChD5VKWkSNspoAOTbYUQ&s" alt="Azure">
-                          <img class="img-fluid w-25" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4dcPnKxXMwjxS3_KAMnw8kz2UhRerwlWMgA&s" alt="AWS">
-                        </div>
-
-                        <div class="col d-flex align-items-center justify-content-evenly">
-                          <p class="fs-4">Azure</p>
-                          <p class="fs-4">AWS</p>
-                        </div>
-                      
-                      </div>
-                    </div>
-                  </div>
-
-                </li>
-              </ul>
-
-            </div>
-          </div>
-        </div>
-          
-      </div>
-
-      <div class="container text-center w-75">
-
-
-
-      </div>
-
-    </div>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"></script>
-  </body>
+</script>
+</body>
 </html>
