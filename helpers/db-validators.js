@@ -1,3 +1,5 @@
+const Category = require('../models/category');
+const Product = require('../models/product');
 const Role = require('../models/role');
 const Usuario = require('../models/user');
 
@@ -30,9 +32,39 @@ const userExistById = async( id ) => { // el id del usuario es el campo que esto
  
 }
 
+const categoryExist = async( id ) => {
+
+  const isCategoryInDb = await Category.findById( id );
+  if( !isCategoryInDb ) {
+    throw new Error(`The category with the id ${id} doesn't exist in the DB`);
+  }
+
+}
+
+const categoryExistByName = async( name ) => {
+
+  name = name.toUpperCase();
+  const isCategoryInDb = await Category.findOne({ name });
+  if( !isCategoryInDb ) {
+    throw new Error(`The category with the name ${name} doesn't exist in the DB`);
+  }
+
+}
+
+const productExist = async( id ) => {
+
+  const isProductInDb = await Product.findById( id );
+  if( !isProductInDb ) {
+    throw new Error(`The product with the id ${id} doesn't exist in the DB`);
+  }
+
+}
 
 module.exports = {
   isValidRole,
   emailExist,
-  userExistById
+  userExistById,
+  categoryExist,
+  categoryExistByName,
+  productExist
 }

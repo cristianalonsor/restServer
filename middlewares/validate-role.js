@@ -1,7 +1,7 @@
-const { request } = require("express");
+const { response } = require("express");
 
 
-const validateUserRole = async ( req = request, res, next ) => {
+const validateUserRole = async ( req, res = response, next ) => {
 
   if( !req.usuario ) {
 
